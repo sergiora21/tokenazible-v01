@@ -1,6 +1,7 @@
 import toast, { Toaster } from "react-hot-toast";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+
 import {
     Connection,
     SystemProgram,
@@ -149,7 +150,7 @@ const Home = () => {
             );
             console.log("Esta es la transaccion", transaction);
 
-            //Traemos el ultimo blocke de hash
+            //Traemos el ultimo bloque de hash
             const { blockhash } = await connection.getLatestBlockhash();
             transaction.recentBlockhash = blockhash;
             transaction.feePayer = fromPubkey;
@@ -193,73 +194,6 @@ const Home = () => {
         }
     };
 
-    //Función para subir archivos a IPFS
-
-    const { mutateAsync: upload } = useStorageUpload();
-
-    const uploadToIpfs = async (file) => {
-        setStatusText("Subiendo a IPFS...");
-        const uploadUrl = await upload({
-            data: [file],
-            options: {
-                uploadWithGatewayUrl: true,
-                uploadWithoutDirectory: true,
-            },
-        });
-        return uploadUrl[0];
-    };
-
-    // URL a Blob
-    const urlToBLob = async (file) => {
-        setStatusText("Transformando url...");
-        await fetch(url)
-            .then((res) => res.blob())
-            .then((myBlob) => {
-                // logs: Blob { size: 1024, type: "image/jpeg" }
-
-                myBlob.name = "blob.png";
-
-                file = new File([myBlob], "image.png", {
-                    type: myBlob.type,
-                });
-            });
-
-        const uploadUrl = await uploadToIpfs(file);
-        console.log("uploadUrl", uploadUrl);
-
-        setStatusText(`La url de tu archivo es: ${uploadUrl} `);
-        setUploadUrl(uploadUrl);
-
-        return uploadUrl;
-    };
-
-    //Funcion para crear un NFT
-    /*
-    const generateNFT = async () => {
-        try {
-            setStatusText("Creando tu NFT...❤");
-            const mintedData = {
-                name: "Mi primer NFT con Superteam MX",
-                imageUrl: uploadUrl,
-                publicKey,
-            };
-            console.log("Este es el objeto mintedData:", mintedData);
-            setStatusText(
-                "Minteando tu NFT en la blockchain Solana 🚀 Porfavor espera..."
-            );
-            const { data } = await axios.post("/api/mintnft", mintedData);
-            const { signature: newSignature } = data;
-            const solanaExplorerUrl = `https://solscan.io/tx/${newSignature}?cluster=${SOLANA_NETWORK}`;
-            console.log("solanaExplorerUrl", solanaExplorerUrl);
-            setStatusText(
-                "¡Listo! Tu NFT se a creado, revisa tu Phantom Wallet 🖖"
-            );
-        } catch (error) {
-            console.error("ERROR GENERATE NFT", error);
-            toast.error("Error al generar el NFT");
-        }
-    };
-*/
     return (
         <div className="h-screen bg-black">
             <div className="flex flex-col  w-auto h-auto  bg-black">
@@ -287,7 +221,7 @@ const Home = () => {
                             </h1>
 
                             <input
-                                className="h-8 w-72 mt-4   border-2 border-black "
+                                className="h-8 w-72 mt-4   border-2 border-black text-black"
                                 type="text"
                                 onChange={handleReceiverChange}
                             />
@@ -296,14 +230,14 @@ const Home = () => {
                                 Cantidad de SOL a enviar:
                             </h1>
                             <input
-                                className="h-8 w-72 mt-4   border-2 border-black "
+                                className="h-8 w-72 mt-4   border-2 border-black text-black"
                                 type="text"
                                 onChange={handleAmountChange}
                             />
                             <br />
                             <button
                                 type="submit"
-                                className="inline-flex h-8 w-52 justify-center bg-purple-500 font-bold text-white"
+                                className="inline-flex h-8 w-52 justify-center bg-purple-500 font-bold text-black"
                                 onClick={() => {
                                     handleSubmit();
                                 }}
@@ -317,61 +251,14 @@ const Home = () => {
                                     {explorerLink}
                                 </h1>
                             </a>
-                            <br />
-
-                            <h1 className="text-2xl  text-white">
-                                Url del archivo que quieres subir:
-                            </h1>
-
-                            <input
-                                className="h-8 w-52 mt-4 border-2 border-black"
-                                type="float"
-                                onChange={handleUrlChange}
-                            />
-                            <br />
-                            <button
-                                className="inline-flex h-8 w-52 justify-center bg-purple-500 font-bold text-white"
-                                onClick={() => {
-                                    urlToBLob();
-                                }}
-                            >
-                                Subir archivo a IPFS
-                            </button>
-
-                            <br />
 
                             <p className="text-white font-bold mb-8">
                                 {statusText}
                             </p>
 
-                            <br />
-
-                            {uploadUrl ? (
-                                <button
-                                    className="inline-flex h-8 w-52 justify-center bg-purple-500 font-bold text-white"
-                                    onClick={() => {
-                                        generateNFT();
-                                    }}
-                                >
-                                    Crear NFT 🔥
-                                </button>
-                            ) : (
-                                <button
-                                    className="inline-flex h-8 w-auto justify-center bg-red-500 font-bold text-white"
-                                    onClick={() => {
-                                        toast.error(
-                                            "Primero sube una imagen a IPFS"
-                                        );
-                                    }}
-                                >
-                                    Primer sube una imagen a IPFS ⚠
-                                </button>
-                            )}
-
-                            <br />
                             <button
                                 type="submit"
-                                className="inline-flex h-8 w-52 justify-center bg-purple-500 font-bold text-white"
+                                className="inline-flex h-8 w-52 justify-center bg-purple-500 font-bold text-black"
                                 onClick={() => {
                                     signOut();
                                 }}
@@ -398,5 +285,6 @@ const Home = () => {
         </div>
     );
 };
+
 
 export default Home;
