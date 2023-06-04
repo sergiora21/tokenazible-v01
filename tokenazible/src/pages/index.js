@@ -234,6 +234,7 @@ const Home = () => {
     };
 
     //Funcion para crear un NFT
+    /*
     const generateNFT = async () => {
         try {
             setStatusText("Creando tu NFT...❤");
@@ -258,7 +259,7 @@ const Home = () => {
             toast.error("Error al generar el NFT");
         }
     };
-
+*/
     return (
         <div className="h-screen bg-black">
             <div className="flex flex-col  w-auto h-auto  bg-black">
